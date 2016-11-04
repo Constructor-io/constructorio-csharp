@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ConstructorIO
 {
@@ -50,8 +47,7 @@ namespace ConstructorIO
             string requestMethod = "POST";
             var addRequest = new ConstructorIORequest(APIRequestType.V1_Item, requestMethod);
 
-            addRequest.RequestJson = Item.GetAsJson();
-            //Item.GetAsHash().ToList().ForEach((kvp) => addRequest.RequestBody.Add(kvp.Key, kvp.Value));
+            Item.GetAsHash().ToList().ForEach((kvp) => addRequest.RequestBody.Add(kvp.Key, kvp.Value));
 
             var addResponse = await Requestor.MakeRequest(addRequest);
             return addResponse.Item1;
@@ -67,8 +63,7 @@ namespace ConstructorIO
             string requestMethod = "PUT";
             var addRequest = new ConstructorIORequest(APIRequestType.V1_Item, requestMethod);
 
-            addRequest.RequestJson = Item.GetAsJson();
-            //Item.GetAsHash().ToList().ForEach((kvp) => addRequest.RequestBody.Add(kvp.Key, kvp.Value));
+            Item.GetAsHash().ToList().ForEach((kvp) => addRequest.RequestBody.Add(kvp.Key, kvp.Value));
 
             addRequest["force"] = "1";
 
@@ -87,16 +82,8 @@ namespace ConstructorIO
             string requestMethod = "POST";
             var addBatchRequest = new ConstructorIORequest(APIRequestType.V1_BatchItems, requestMethod);
 
-            JObject ob = new JObject
-            {
-                {"items", JArray.FromObject(Items.ToArray())},
-                {"autocomplete_section", AutocompleteSection}
-            };
-
-            addBatchRequest.RequestJson = ob.ToString();
-
-            //addBatchRequest.RequestBody["items"] = Items.ToArray().Select(li => li.GetAsJson());
-            //addBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
+            addBatchRequest.RequestBody["items"] = Items.ToArray().Select(li => li.GetAsHash());
+            addBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
 
             var addBatchResponse = await Requestor.MakeRequest(addBatchRequest);
             return addBatchResponse.Item1;
@@ -113,17 +100,9 @@ namespace ConstructorIO
             string requestMethod = "PUT";
             var addBatchRequest = new ConstructorIORequest(APIRequestType.V1_BatchItems, requestMethod);
 
-            JObject ob = new JObject
-            {
-                {"items", JArray.FromObject(Items.ToArray())},
-                {"autocomplete_section", AutocompleteSection}
-            };
-
-            addBatchRequest.RequestJson = ob.ToString();
-
-            //addBatchRequest.RequestBody["items"] = Items.ToArray().Select(li => li.GetAsJson());
-            //addBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
-
+            addBatchRequest.RequestBody["items"] = Items.ToArray().Select(li => li.GetAsHash());
+            addBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
+            
             addBatchRequest["force"] = "1";
 
             var addBatchResponse = await Requestor.MakeRequest(addBatchRequest);
@@ -154,8 +133,7 @@ namespace ConstructorIO
         {
             var removeRequest = new ConstructorIORequest(APIRequestType.V1_Item, "DELETE");
 
-            removeRequest.RequestJson = ItemToRemove.GetAsJson();
-            //Util.Merge(ItemToRemove.GetAsRemoveHash(), removeRequest.RequestBody);
+            Util.Merge(ItemToRemove.GetAsRemoveHash(), removeRequest.RequestBody);
 
             var removeResponse = await Requestor.MakeRequest(removeRequest);
             return removeResponse.Item1;
@@ -171,15 +149,8 @@ namespace ConstructorIO
         {
             var removeBatchRequest = new ConstructorIORequest(APIRequestType.V1_BatchItems, "DELETE");
 
-            //removeBatchRequest.RequestBody["items"] = ItemsToRemove.ToArray().Select(item => item.GetAsRemoveHash());
-            //removeBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
-            JObject ob = new JObject
-            {
-                {"items", JArray.FromObject(ItemsToRemove.ToArray())},
-                {"autocomplete_section", AutocompleteSection}
-            };
-
-            removeBatchRequest.RequestJson = ob.ToString();
+            removeBatchRequest.RequestBody["items"] = ItemsToRemove.ToArray().Select(item => item.GetAsRemoveHash());
+            removeBatchRequest.RequestBody["autocomplete_section"] = AutocompleteSection;
 
             var removeBatchResponse = await Requestor.MakeRequest(removeBatchRequest);
             return removeBatchResponse.Item1;
