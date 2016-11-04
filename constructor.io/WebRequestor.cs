@@ -29,10 +29,7 @@ namespace ConstructorIO
 
         internal async Task<Tuple<bool, string>> MakeRequest(ConstructorIORequest APIRequest)
         {
-            return await MakeRequest(APIRequest, (response) =>
-            {
-                return ((int)response.StatusCode) == 204;
-            });
+            return await MakeRequest(APIRequest, (response) => ((int)response.StatusCode) == 204);
         }
 
         internal async Task<Tuple<bool, string>> MakeRequest(ConstructorIORequest APIRequest, Func<HttpWebResponse, bool> ResponseCheck)
@@ -48,12 +45,13 @@ namespace ConstructorIO
 
             try
             {
-                if (APIRequest.RequestBody != null)
+                if (APIRequest.RequestJson != null)
                 {
-                    JObject jobj = JObject.FromObject(APIRequest.RequestBody);
-                    jsonBody = jobj.ToString()
-                                    .Replace("\"[", "[")
-                                    .Replace("]\"", "]");
+                    jsonBody = APIRequest.RequestJson;
+                    //JObject jobj = JObject.FromObject(APIRequest.RequestBody);
+                    //        jsonBody = jobj.ToString()
+                    //                        .Replace("\"[", "[")
+                    //                        .Replace("]\"", "]");
                 }
             }
             catch (Exception ex)
@@ -147,7 +145,7 @@ namespace ConstructorIO
     public class ConstructorIOException : Exception
     {
         public ConstructorIOException(string ErrorMessage)
-            :base(ErrorMessage)
+            : base(ErrorMessage)
         {
         }
     }

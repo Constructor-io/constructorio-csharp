@@ -76,6 +76,8 @@ namespace ConstructorIO
             get { return _requestBody; }
         }
 
+        public string RequestJson { get; set; }
+
         public string Method { get { return _method; } }
     }
 

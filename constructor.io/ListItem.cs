@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConstructorIO
 {
@@ -9,22 +11,22 @@ namespace ConstructorIO
 
     public class ListItem
     {
-        private string _name;
-        private string _autocompleteSection;
-        private string _url;
-        private string _imageUrl;
-        private string _description;
-        private string _id;
+        private string _name = null;
+        private string _newname = null;
+        private string _autocompleteSection = null;
+        private string _url = null;
+        private string _imageUrl = null;
+        private string _description = null;
+        private string _id = null;
         private int _suggestedScore = -1;
-
-        private string _originalName;
+        private readonly string _originalName = null;
 
         private List<string> _keywords;
         private Dictionary<string, string> _metadata;
-        private HashArgs _extraArgs;
+        private readonly HashArgs _extraArgs;
 
         public ListItem(string Name, ListItemAutocompleteType AutocompleteSection)
-            :this(Name, StringEnum.GetStringValue(AutocompleteSection))
+            : this(Name, StringEnum.GetStringValue(AutocompleteSection))
         {
 
         }
@@ -43,11 +45,21 @@ namespace ConstructorIO
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
             string Description = null, string Url = null, string ImageUrl = null, int SuggestedScore = -1,
             IEnumerable<string> Keywords = null, IDictionary<string, string> Metadata = null)
-            :this()
+            : this()
         {
-            _originalName = _name = Name;
-            _autocompleteSection = AutocompleteSection;
             _id = ID;
+            _originalName = _name = Name;
+            if (_id != null && _name != null)
+            {
+                _newname = _name;
+            }
+            else
+            {
+                if (_originalName != null) _name = _originalName;
+                _newname = _name;
+            }
+
+            _autocompleteSection = AutocompleteSection;
             _description = Description;
             _url = Url;
             _imageUrl = ImageUrl;
@@ -57,6 +69,8 @@ namespace ConstructorIO
             {
                 _metadata = new Dictionary<string, string>(Metadata);
             }
+
+
         }
 
         public ListItem()
@@ -66,59 +80,71 @@ namespace ConstructorIO
             _extraArgs = new HashArgs();
         }
 
-        internal HashArgs GetAsHash()
+        //internal HashArgs GetAsHash()
+        //{
+        //    HashArgs outputHash = new HashArgs();
+
+        //    if (_name != null) outputHash["item_name"] = _name;
+        //    if (_autocompleteSection != null) outputHash["autocomplete_section"] = _autocompleteSection;
+
+        //    if (_autocompleteSection != StringEnum.GetStringValue(ListItemAutocompleteType.SearchSuggestions))
+        //        if (_id != null) outputHash["id"] = _id;
+
+        //    if (_url != null) outputHash["url"] = _url;
+        //    if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
+        //    if (_description != null) outputHash["description"] = _description;
+        //    if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
+        //    if (_metadata != null && _metadata.Count != 0)
+        //        outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
+        //    //JsonConvert.SerializeObject(_metadata);
+        //    if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
+
+        //    if (_extraArgs != null && _extraArgs.Count != 0)
+        //        Util.Merge(_extraArgs, outputHash);
+
+        //    return outputHash;
+        //}
+
+        internal string GetAsJson()
         {
-            HashArgs outputHash = new HashArgs();
-
-            if (_name != null) outputHash["item_name"] = _name;
-            if (_autocompleteSection != null) outputHash["autocomplete_section"] = _autocompleteSection;
-
-            if (_autocompleteSection != StringEnum.GetStringValue(ListItemAutocompleteType.SearchSuggestions))
-                if (_id != null) outputHash["id"] = _id;
-
-            if (_url != null) outputHash["url"] = _url;
-            if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
-            if (_description != null) outputHash["description"] = _description;
-            if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
-            if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
-            if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
-
-            if (_extraArgs != null && _extraArgs.Count != 0)
-                Util.Merge(_extraArgs, outputHash);
-
-            return outputHash;
+            return JsonConvert.SerializeObject(this, Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
         }
 
-        internal HashArgs GetAsRemoveHash()
+        internal string GetAsRemoveHash()
         {
             HashArgs outputHash = new HashArgs();
+            ListItem tmp = new ListItem();
 
-            if (_name != null) outputHash["item_name"] = _name;
-            if (_autocompleteSection != null) outputHash["autocomplete_section"] = _autocompleteSection;
+            if (_name != null) tmp.Name = _name;// outputHash["item_name"] = _name;
+            if (_autocompleteSection != null) tmp.AutocompleteSection = _autocompleteSection;// outputHash["autocomplete_section"] = _autocompleteSection;
 
             if (_autocompleteSection != StringEnum.GetStringValue(ListItemAutocompleteType.SearchSuggestions))
-                if (_id != null) outputHash["id"] = _id;
+                if (_id != null) tmp.ID = _id;//outputHash["id"] = _id;
 
-            return outputHash;
+            return tmp.GetAsJson();
         }
 
         internal HashArgs GetAsModifyHash()
         {
             HashArgs outputHash = new HashArgs();
 
-            if(_id != null)
+            if (_id != null)
             {
                 outputHash["id"] = _id;
-                if(_name != null) outputHash["new_item_name"] = _name;
+                if (_name != null) outputHash["new_item_name"] = _name;
             }
             else
             {
-                if(_originalName != null) outputHash["item_name"] = _originalName;
+                if (_originalName != null) outputHash["item_name"] = _originalName;
                 outputHash["new_item_name"] = _name;
             }
-            
+
             if (_autocompleteSection != null) outputHash["autocomplete_section"] = _autocompleteSection;
-            
+
             if (_url != null) outputHash["url"] = _url;
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
@@ -142,24 +168,36 @@ namespace ConstructorIO
             _metadata.Add(Key, Value);
         }
 
+        [JsonProperty("item_name")]
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
+        [JsonProperty("new_item_name")]
+        public string NewName
+        {
+            get { return _newname; }
+            set { _newname = value; }
+        }
+
+
+        [JsonProperty("autocomplete_section")]
         public string AutocompleteSection
         {
             get { return _autocompleteSection; }
             set { _autocompleteSection = value; }
         }
 
+        [JsonProperty("url")]
         public string Url
         {
             get { return _url; }
             set { _url = value; }
         }
 
+        [JsonProperty("image_url")]
         public string ImageUrl
         {
             get { return _imageUrl; }
@@ -172,18 +210,28 @@ namespace ConstructorIO
             set { _description = value; }
         }
 
+        [JsonProperty("id")]
         public string ID
         {
             get { return _id; }
             set { _id = value; }
         }
 
+        [JsonProperty("keywords")]
         public List<string> Keywords
         {
             get { return _keywords; }
             set { _keywords = value; }
         }
 
+        [JsonProperty("metadata")]
+        public Dictionary<string, string> MetaData
+        {
+            get { return _metadata; }
+            set { _metadata = value; }
+        }
+
+        [JsonProperty("suggested_score", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int SuggestedScore
         {
             get { return _suggestedScore; }
