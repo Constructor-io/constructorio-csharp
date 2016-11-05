@@ -20,6 +20,7 @@ namespace ConstructorIO
         private string _originalName;
 
         private List<string> _keywords;
+        private Dictionary<string, string> _metadata;
         private HashArgs _extraArgs;
 
         public ListItem(string Name, ListItemAutocompleteType AutocompleteSection)
@@ -41,7 +42,7 @@ namespace ConstructorIO
         /// <param name="Keywords">Keywords that represent your item</param>
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
             string Description = null, string Url = null, string ImageUrl = null, int SuggestedScore = -1,
-            IEnumerable<string> Keywords = null)
+            IEnumerable<string> Keywords = null, IDictionary<string, string> Metadata = null)
             :this()
         {
             _originalName = _name = Name;
@@ -52,11 +53,16 @@ namespace ConstructorIO
             _imageUrl = ImageUrl;
             _suggestedScore = SuggestedScore;
             if (Keywords != null) _keywords.AddRange(Keywords);
+            if (Metadata != null)
+            {
+                _metadata = new Dictionary<string, string>(Metadata);
+            }
         }
 
         public ListItem()
         {
             _keywords = new List<string>();
+            _metadata = new Dictionary<string, string>();
             _extraArgs = new HashArgs();
         }
 
@@ -74,7 +80,8 @@ namespace ConstructorIO
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
-            if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
+            if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
+            if (_suggestedScore >= 0) outputHash["suggested_score"] = _suggestedScore;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -116,6 +123,7 @@ namespace ConstructorIO
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
+            if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
             if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
@@ -128,7 +136,12 @@ namespace ConstructorIO
         {
             _keywords.Add(Keyword);
         }
-        
+
+        public void AddMetadata(string Key, string Value)
+        {
+            _metadata.Add(Key, Value);
+        }
+
         public string Name
         {
             get { return _name; }
@@ -171,6 +184,11 @@ namespace ConstructorIO
             set { _keywords = value; }
         }
 
+        public Dictionary<string,string> MetaData
+        {
+            get { return _metadata; }
+            set { _metadata = value; }
+        }
         public int SuggestedScore
         {
             get { return _suggestedScore; }
