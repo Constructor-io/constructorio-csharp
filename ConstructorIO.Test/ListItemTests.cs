@@ -35,7 +35,7 @@ namespace ConstructorIO.Test
         {
             var api = TestCommon.MakeAPI();
 
-            ListItem testItem = new ListItem(ID: "AddInvalid Test Item", Name: "test-item", SuggestedScore: 50,
+            ListItem testItem = new ListItem(ID: "Add Test Item", Name: "test-item", SuggestedScore: 50,
                 Description: "Sample Item", Url: "http://test.com", AutocompleteSection: "Products",
                 ImageUrl: "http://test.com/test.jpg",
                 Keywords: new string[]
@@ -43,6 +43,21 @@ namespace ConstructorIO.Test
                     "keyword_a",
                     "keyword_b"
                 });
+
+            Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
+            Task.Delay(TestDelay).Wait();
+            Assert.IsTrue(api.Remove(testItem), "Remove Item");
+            Task.Delay(TestDelay).Wait();
+        }
+
+        [TestMethod]
+        public void TestCreateWithBrackets()
+        {
+            var api = TestCommon.MakeAPI();
+
+            ListItem testItem = new ListItem(ID: "Add Test Item", Name: "test-item [brackets]", SuggestedScore: 50,
+                Description: "Sample Item", Url: "http://test.com", AutocompleteSection: "Products",
+                ImageUrl: "http://test.com/test.jpg");
 
             Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
             Task.Delay(TestDelay).Wait();
@@ -77,7 +92,7 @@ namespace ConstructorIO.Test
         {
             var api = TestCommon.MakeAPI();
 
-            ListItem testItem = new ListItem(ID: "Add Test Item 3", Name: "test-item2",
+            ListItem testItem = new ListItem(ID: "Add Test Item 4", Name: "test-item4",
                 Description: "Sample Item", Url: "http://test.com", AutocompleteSection: "Products",
                 ImageUrl: "http://test.com/test.jpg",
                 Metadata: new Dictionary<string, string>
@@ -90,8 +105,8 @@ namespace ConstructorIO.Test
 
             Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
             Task.Delay(TestDelay).Wait();
-//            Assert.IsTrue(api.Remove(testItem), "Remove Item");
-//            Task.Delay(TestDelay).Wait();
+            Assert.IsTrue(api.Remove(testItem), "Remove Item");
+            Task.Delay(TestDelay).Wait();
         }
 
         [TestMethod]
@@ -305,7 +320,7 @@ namespace ConstructorIO.Test
                 batchTestSet.Add(testItem);
             }
 
-            Assert.IsTrue(api.AddOrUpdateBatch(batchTestSet, ListItemAutocompleteType.SearchSuggestions));
+            Assert.IsTrue(api.AddOrUpdateBatch(batchTestSet, ListItemAutocompleteType.Products));
             Task.Delay(TestDelay).Wait();
 
             Assert.IsTrue(api.RemoveBatch(batchTestSet, ListItemAutocompleteType.SearchSuggestions), "Batch Remove");

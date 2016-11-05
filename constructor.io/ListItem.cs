@@ -80,8 +80,8 @@ namespace ConstructorIO
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
-            if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
-            if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
+            if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
+            if (_suggestedScore >= 0) outputHash["suggested_score"] = _suggestedScore;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -184,6 +184,11 @@ namespace ConstructorIO
             set { _keywords = value; }
         }
 
+        public Dictionary<string,string> MetaData
+        {
+            get { return _metadata; }
+            set { _metadata = value; }
+        }
         public int SuggestedScore
         {
             get { return _suggestedScore; }

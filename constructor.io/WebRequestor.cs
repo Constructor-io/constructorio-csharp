@@ -51,9 +51,7 @@ namespace ConstructorIO
                 if (APIRequest.RequestBody != null)
                 {
                     JObject jobj = JObject.FromObject(APIRequest.RequestBody);
-                    jsonBody = jobj.ToString()
-                                    .Replace("\"[", "[")
-                                    .Replace("]\"", "]");
+                    jsonBody = jobj.ToString();
                 }
             }
             catch (Exception ex)
