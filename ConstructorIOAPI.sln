@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample App", "Sample App\Sample App.csproj", "{8E24D4C5-F382-4038-A695-AC0B3AE6429D}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample App (Add Modify Delete )", "Sample App (Add Modify Delete )\Sample App (Add Modify Delete ).csproj", "{367CB818-6AF1-4306-83EA-2A77888B101E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructorIO.Test", "ConstructorIO.Test\ConstructorIO.Test.csproj", "{C71ECCC2-332D-4F7A-837C-91A9B68156EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConsoleApplication", "SampleConsoleApplication\SampleConsoleApplication.csproj", "{56274BE6-DE6D-4DC8-951A-986CE5CA0DF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{C71ECCC2-332D-4F7A-837C-91A9B68156EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C71ECCC2-332D-4F7A-837C-91A9B68156EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C71ECCC2-332D-4F7A-837C-91A9B68156EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56274BE6-DE6D-4DC8-951A-986CE5CA0DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56274BE6-DE6D-4DC8-951A-986CE5CA0DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56274BE6-DE6D-4DC8-951A-986CE5CA0DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56274BE6-DE6D-4DC8-951A-986CE5CA0DF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
