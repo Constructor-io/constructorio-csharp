@@ -34,10 +34,6 @@ namespace SampleConsoleApplication
                 // Lets load a CSV file
                 IEnumerable<ListItem> listItems = Util.LoadCSV("sample.csv");
 
-                ListItem test = new ListItem();
-                test.SuggestedScore = 1;
-                test["suggested_score"] = 1;
-
                 Console.WriteLine("CSV file loaded and has "+listItems.Count() +" entries");
 
                 // And upload it to Construtor.IO, under the section "Products"
