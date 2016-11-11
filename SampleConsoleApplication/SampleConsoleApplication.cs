@@ -9,14 +9,19 @@ namespace SampleConsoleApplication
 {
     class SampleConsoleApplication
     {
-        static string API_TOKEN = "cw5EdmA2M8MiKKQJnFud";
-        static string KEY = "4Yzd67JX5swJ58s0SynS";
+        static string API_TOKEN = "XXXXXXXXXXXXXXXXXXXX";
+        static string KEY       = "XXXXXXXXXXXXXXXXXXXX";
 
         static void Main(string[] args)
         {
             
             try
             {
+                // We'll need an API TOKEN and KEY. You can get these from your dashboard on Custructor.io
+                // Store them as an Environment Variable or hardcoded here.
+                API_TOKEN = Environment.GetEnvironmentVariable("CONSTRUCTORIO_API_TOKEN", EnvironmentVariableTarget.User);
+                KEY = Environment.GetEnvironmentVariable("CONSTRUCTORIO_KEY", EnvironmentVariableTarget.User);
+
                 // Create a Constructor.IO client
                 ConstructorIOAPI constructorClient = new ConstructorIOAPI(API_TOKEN, KEY);
 
