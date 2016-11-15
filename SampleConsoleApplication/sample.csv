@@ -1,0 +1,5 @@
+item_name,suggested_score,url,image_url,description
+"Labrador Retriever",10000,"/dogs/labrador-retriever.html","/assets/labrador.jpg","A lovely dog that likes to play fetch."
+"Standard Poodle",100,"/dogs/standard-poodle.html","/assets/poodle.jpg","Hypo-allergenic for the allergic."
+"Fox Terrier (Smooth)",1,"/dogs/fox-terrier.html","/assets/fox-terrier.jpg","Like a fox terrier but smooth."
+"Australian Shepherd",375,"/dogs/australian-shepherd.html","/assets/australian-shepherd.jpg","Their bobbed tails are less than 3"". A friendly & energetic dog."

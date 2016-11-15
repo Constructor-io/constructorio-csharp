@@ -17,12 +17,12 @@ namespace ConstructorIO.Test
 
             if (String.IsNullOrWhiteSpace(key))
             {
-                throw new Exception("No API key provided. Set Environment variable '" + ENV_APIKEY + "' to '{API Key}:{Autocomplete Key}'");
+                throw new Exception("No TOKEN:KEY provided. Set Environment variable '" + ENV_APIKEY + "' to '{API Token}:{Key}'");
             }
             else
             {
                 string[] apiParts = key.Split(':');
-                if (apiParts.Length != 2) throw new Exception("Invalid API Key format. Use '{API Key}:{Autocomplete Key}' example 'xxxx:yyyy'");
+                if (apiParts.Length != 2) throw new Exception("Invalid TOKEN:KEY format. Use '{API Token}:{Key}' example 'xxxx:yyyy'");
 
                 return new ConstructorIOAPI(apiParts[0], apiParts[1]);
             }
