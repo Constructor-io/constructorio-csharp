@@ -29,7 +29,7 @@ namespace SampleConsoleApplication
                 if (!constructorClient.Verify())
                     throw new Exception("Authentication failed. Please check that you have the correct API token and KEY");
 
-                Console.WriteLine("Authentication veridied");
+                Console.WriteLine("Authentication verified");
 
                 // Lets load a CSV file
                 IEnumerable<ListItem> listItems = Util.LoadCSV("sample.csv");
