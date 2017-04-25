@@ -148,6 +148,23 @@ namespace ConstructorIO.Test
         }
 
         [TestMethod]
+        public void TestAddRemoveWithNullSuggestedScore()
+        {
+            var api = TestCommon.MakeAPI();
+
+            ListItem testItem = new ListItem("AddRemove Null Suggested Score Test Item", ListItemAutocompleteType.Products)
+            {
+                ID = "AddRemoveNillSuggestedScoreTestItem",
+                Url = "http://test.com",
+                SuggestedScore = null
+            };
+
+            Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
+            Task.Delay(TestDelay).Wait();
+            Assert.IsTrue(api.Remove(testItem), "Remove Item");
+            Task.Delay(TestDelay).Wait();
+        }
+        [TestMethod]
         public void TestModifyByName()
         {
             var api = TestCommon.MakeAPI();

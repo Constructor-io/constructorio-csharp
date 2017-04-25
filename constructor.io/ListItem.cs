@@ -15,7 +15,7 @@ namespace ConstructorIO
         private string _imageUrl;
         private string _description;
         private string _id;
-        private int _suggestedScore = -1;
+        private int? _suggestedScore;
 
         private string _originalName;
 
@@ -38,10 +38,10 @@ namespace ConstructorIO
         /// <param name="Description">A description of the ListItem</param>
         /// <param name="Url">A URL for the ListItem</param>
         /// <param name="ImageUrl">An Image URL for the ListItem</param>
-        /// <param name="SuggestedScore">Suggested score ranking for list item. Set to -1 to ignore. </param>
+        /// <param name="SuggestedScore">Suggested score ranking for list item</param>
         /// <param name="Keywords">Keywords that represent your item</param>
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
-            string Description = null, string Url = null, string ImageUrl = null, int SuggestedScore = -1,
+            string Description = null, string Url = null, string ImageUrl = null, int? SuggestedScore = null,
             IEnumerable<string> Keywords = null, IDictionary<string, string> Metadata = null)
             :this()
         {
@@ -81,7 +81,7 @@ namespace ConstructorIO
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
-            if (_suggestedScore >= 0) outputHash["suggested_score"] = _suggestedScore;
+            if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -124,7 +124,7 @@ namespace ConstructorIO
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
-            if (_suggestedScore >= 0 && _suggestedScore <= 100) outputHash["suggested_score"] = _suggestedScore;
+            if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -189,7 +189,7 @@ namespace ConstructorIO
             get { return _metadata; }
             set { _metadata = value; }
         }
-        public int SuggestedScore
+        public int? SuggestedScore
         {
             get { return _suggestedScore; }
             set { _suggestedScore = value; }
