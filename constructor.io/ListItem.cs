@@ -16,6 +16,7 @@ namespace ConstructorIO
         private string _description;
         private string _id;
         private int? _suggestedScore;
+        private bool? _deactivated;
 
         private string _originalName;
 
@@ -40,9 +41,13 @@ namespace ConstructorIO
         /// <param name="ImageUrl">An Image URL for the ListItem</param>
         /// <param name="SuggestedScore">Suggested score ranking for list item</param>
         /// <param name="Keywords">Keywords that represent your item</param>
+        /// <param name="Deactivated">Boolean indicating whether item is deactivated</param>
+        /// <param name="Metadata">Dictionary of arbitrary key/value pairs for the item</param>
+
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
             string Description = null, string Url = null, string ImageUrl = null, int? SuggestedScore = null,
-            IEnumerable<string> Keywords = null, IDictionary<string, string> Metadata = null)
+            IEnumerable<string> Keywords = null, bool? Deactivated = null,
+            IDictionary<string, string> Metadata = null)
             :this()
         {
             _originalName = _name = Name;
@@ -52,6 +57,7 @@ namespace ConstructorIO
             _url = Url;
             _imageUrl = ImageUrl;
             _suggestedScore = SuggestedScore;
+            _deactivated = Deactivated;
             if (Keywords != null) _keywords.AddRange(Keywords);
             if (Metadata != null)
             {
@@ -82,6 +88,7 @@ namespace ConstructorIO
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
             if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
+            if (_deactivated != null) outputHash["deactivated"] = _deactivated;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -125,6 +132,7 @@ namespace ConstructorIO
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
             if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
+            if (_deactivated != null) outputHash["deactivated"] = _deactivated;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -193,6 +201,12 @@ namespace ConstructorIO
         {
             get { return _suggestedScore; }
             set { _suggestedScore = value; }
+        }
+
+        public bool? Deactivated
+        {
+            get { return _deactivated; }
+            set { _deactivated = value; }
         }
 
         public object this[string key]
