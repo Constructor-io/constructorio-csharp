@@ -164,6 +164,45 @@ namespace ConstructorIO.Test
             Assert.IsTrue(api.Remove(testItem), "Remove Item");
             Task.Delay(TestDelay).Wait();
         }
+
+        [TestMethod]
+        public void TestAddRemoveWithDeactivated()
+        {
+            var api = TestCommon.MakeAPI();
+
+            ListItem testItem = new ListItem("AddRemove Deactivated Test Item", ListItemAutocompleteType.Products)
+            {
+                ID = "AddRemoveNillSuggestedScoreTestItem",
+                Url = "http://test.com",
+                Deactivated = true
+            };
+
+            Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
+            Task.Delay(TestDelay).Wait();
+            Assert.IsTrue(api.Remove(testItem), "Remove Item");
+            Task.Delay(TestDelay).Wait();
+        }
+
+        [TestMethod]
+        public void TestAddRemoveWithGroupId()
+        {
+            var api = TestCommon.MakeAPI();
+
+            ListItem testItem = new ListItem(ID: "Add Test Item with Group Id", Name: "test-item-with-groupid",
+                Description: "Sample Item", Url: "http://test.com", AutocompleteSection: "Products",
+                ImageUrl: "http://test.com/test.jpg",
+                GroupIds: new string[]
+                {
+                    "1",
+                    "2"
+                });
+
+            Assert.IsTrue(api.AddOrUpdate(testItem), "Add Item");
+            Task.Delay(TestDelay).Wait();
+            Assert.IsTrue(api.Remove(testItem), "Remove Item");
+            Task.Delay(TestDelay).Wait();
+        }
+
         [TestMethod]
         public void TestModifyByName()
         {

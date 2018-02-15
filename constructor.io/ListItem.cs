@@ -16,11 +16,15 @@ namespace ConstructorIO
         private string _description;
         private string _id;
         private int? _suggestedScore;
+        private bool? _deactivated;
 
         private string _originalName;
 
         private List<string> _keywords;
+        private List<string> _group_ids;
+
         private Dictionary<string, string> _metadata;
+
         private HashArgs _extraArgs;
 
         public ListItem(string Name, ListItemAutocompleteType AutocompleteSection)
@@ -40,9 +44,14 @@ namespace ConstructorIO
         /// <param name="ImageUrl">An Image URL for the ListItem</param>
         /// <param name="SuggestedScore">Suggested score ranking for list item</param>
         /// <param name="Keywords">Keywords that represent your item</param>
+        /// <param name="GroupIds">GroupIds associated with your item</param>
+        /// <param name="Deactivated">Boolean indicating whether item is deactivated</param>
+        /// <param name="Metadata">Dictionary of arbitrary key/value pairs for the item</param>
+
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
             string Description = null, string Url = null, string ImageUrl = null, int? SuggestedScore = null,
-            IEnumerable<string> Keywords = null, IDictionary<string, string> Metadata = null)
+            IEnumerable<string> Keywords = null, bool? Deactivated = null,
+            IDictionary<string, string> Metadata = null, IEnumerable<string> GroupIds = null)
             :this()
         {
             _originalName = _name = Name;
@@ -52,7 +61,10 @@ namespace ConstructorIO
             _url = Url;
             _imageUrl = ImageUrl;
             _suggestedScore = SuggestedScore;
+            _deactivated = Deactivated;
             if (Keywords != null) _keywords.AddRange(Keywords);
+            if (GroupIds != null) _group_ids.AddRange(GroupIds);
+
             if (Metadata != null)
             {
                 _metadata = new Dictionary<string, string>(Metadata);
@@ -62,6 +74,7 @@ namespace ConstructorIO
         public ListItem()
         {
             _keywords = new List<string>();
+            _group_ids = new List<string>();
             _metadata = new Dictionary<string, string>();
             _extraArgs = new HashArgs();
         }
@@ -80,8 +93,10 @@ namespace ConstructorIO
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
+            if (_group_ids != null && _group_ids.Count != 0) outputHash["group_ids"] = _group_ids.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x.Key, x => x.Value);
             if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
+            if (_deactivated != null) outputHash["deactivated"] = _deactivated;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -123,8 +138,10 @@ namespace ConstructorIO
             if (_imageUrl != null) outputHash["image_url"] = _imageUrl;
             if (_description != null) outputHash["description"] = _description;
             if (_keywords != null && _keywords.Count != 0) outputHash["keywords"] = _keywords.ToArray();
+            if (_group_ids != null && _group_ids.Count != 0) outputHash["group_ids"] = _group_ids.ToArray();
             if (_metadata != null && _metadata.Count != 0) outputHash["metadata"] = _metadata.ToDictionary(x => x);
             if (_suggestedScore != null) outputHash["suggested_score"] = _suggestedScore;
+            if (_deactivated != null) outputHash["deactivated"] = _deactivated;
 
             if (_extraArgs != null && _extraArgs.Count != 0)
                 Util.Merge(_extraArgs, outputHash);
@@ -135,6 +152,11 @@ namespace ConstructorIO
         public void AddKeyword(string Keyword)
         {
             _keywords.Add(Keyword);
+        }
+
+        public void AddGroupId(string GroupId)
+        {
+            _group_ids.Add(GroupId);
         }
 
         public void AddMetadata(string Key, string Value)
@@ -184,6 +206,12 @@ namespace ConstructorIO
             set { _keywords = value; }
         }
 
+        public List<string> GroupIds
+        {
+            get { return _group_ids; }
+            set { _group_ids = value; }
+        }
+
         public Dictionary<string,string> MetaData
         {
             get { return _metadata; }
@@ -193,6 +221,12 @@ namespace ConstructorIO
         {
             get { return _suggestedScore; }
             set { _suggestedScore = value; }
+        }
+
+        public bool? Deactivated
+        {
+            get { return _deactivated; }
+            set { _deactivated = value; }
         }
 
         public object this[string key]
