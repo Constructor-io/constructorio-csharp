@@ -50,8 +50,8 @@ namespace ConstructorIO
 
         public ListItem(string Name = null, string AutocompleteSection = null, string ID = null,
             string Description = null, string Url = null, string ImageUrl = null, int? SuggestedScore = null,
-            IEnumerable<string> Keywords = null, IEnumerable<string> GroupIds = null, bool? Deactivated = null,
-            IDictionary<string, string> Metadata = null)
+            IEnumerable<string> Keywords = null, bool? Deactivated = null,
+            IDictionary<string, string> Metadata = null, IEnumerable<string> GroupIds = null)
             :this()
         {
             _originalName = _name = Name;
